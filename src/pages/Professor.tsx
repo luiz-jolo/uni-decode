@@ -1,12 +1,16 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Upload as UploadIcon, FileText, CheckCircle2 } from "lucide-react";
+import { Upload as UploadIcon, FileText, CheckCircle2, Home, BookOpen } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
 
-const Upload = () => {
+const Professor = () => {
   const [file, setFile] = useState<File | null>(null);
+  const [moduleName, setModuleName] = useState("");
+  const [courseName, setCourseName] = useState("");
   const [isDragging, setIsDragging] = useState(false);
   const navigate = useNavigate();
   const { toast } = useToast();
@@ -59,28 +63,89 @@ const Upload = () => {
       return;
     }
 
-    // Aqui você conectará com seu backend
+    if (!moduleName.trim() || !courseName.trim()) {
+      toast({
+        title: "Informações incompletas",
+        description: "Por favor, preencha o nome do curso e do módulo.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    // Aqui você conectará com seu backend para enviar:
+    // - file (PDF)
+    // - moduleName
+    // - courseName
+    
     toast({
-      title: "Arquivo enviado!",
-      description: "O material do módulo foi carregado com sucesso.",
+      title: "Material enviado com sucesso!",
+      description: `O material do módulo "${moduleName}" foi carregado.`,
     });
 
-    navigate("/learning");
+    // Limpar formulário
+    setFile(null);
+    setModuleName("");
+    setCourseName("");
   };
 
   return (
-    <div className="min-h-screen bg-background flex items-center justify-center p-4">
-      <div className="w-full max-w-2xl space-y-6">
+    <div className="min-h-screen bg-background py-8 px-4">
+      <div className="w-full max-w-3xl mx-auto space-y-6">
+        <div className="flex items-center justify-between">
+          <Button
+            variant="outline"
+            onClick={() => navigate("/")}
+            className="gap-2"
+          >
+            <Home className="h-4 w-4" />
+            Voltar
+          </Button>
+        </div>
+
         <div className="text-center space-y-2">
-          <h1 className="text-4xl font-bold text-foreground">Material do Módulo</h1>
+          <div className="flex justify-center mb-4">
+            <div className="p-3 bg-accent/10 rounded-full">
+              <BookOpen className="h-12 w-12 text-accent" />
+            </div>
+          </div>
+          <h1 className="text-4xl font-bold text-foreground">Área do Professor</h1>
           <p className="text-muted-foreground text-lg">
-            Faça upload do PDF com o conteúdo do módulo para começar
+            Faça upload dos materiais dos módulos para os alunos
           </p>
         </div>
 
         <Card>
           <CardHeader>
-            <CardTitle>Upload de Arquivo</CardTitle>
+            <CardTitle>Informações do Módulo</CardTitle>
+            <CardDescription>
+              Preencha os dados do curso e módulo
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="course-name">Nome do Curso</Label>
+              <Input
+                id="course-name"
+                placeholder="Ex: Engenharia de Software"
+                value={courseName}
+                onChange={(e) => setCourseName(e.target.value)}
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="module-name">Nome do Módulo</Label>
+              <Input
+                id="module-name"
+                placeholder="Ex: Arquitetura de Software"
+                value={moduleName}
+                onChange={(e) => setModuleName(e.target.value)}
+              />
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle>Upload do Material</CardTitle>
             <CardDescription>
               Selecione ou arraste o arquivo PDF do módulo
             </CardDescription>
@@ -92,8 +157,8 @@ const Upload = () => {
               onDrop={handleDrop}
               className={`border-2 border-dashed rounded-lg p-12 text-center transition-colors ${
                 isDragging
-                  ? "border-primary bg-primary/5"
-                  : "border-border hover:border-primary/50"
+                  ? "border-accent bg-accent/5"
+                  : "border-border hover:border-accent/50"
               }`}
             >
               {!file ? (
@@ -149,11 +214,11 @@ const Upload = () => {
             <div className="mt-6 flex justify-end">
               <Button
                 onClick={handleSubmit}
-                disabled={!file}
+                disabled={!file || !moduleName.trim() || !courseName.trim()}
                 size="lg"
                 className="min-w-[200px]"
               >
-                Continuar
+                Enviar Material
               </Button>
             </div>
           </CardContent>
@@ -163,4 +228,4 @@ const Upload = () => {
   );
 };
 
-export default Upload;
+export default Professor;

@@ -1,13 +1,13 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { BookOpen, ArrowRight } from "lucide-react";
+import { BookOpen, ArrowRight, Home } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
 
-const Learning = () => {
+const Aluno = () => {
   const [learningText, setLearningText] = useState("");
   const navigate = useNavigate();
   const { toast } = useToast();
@@ -44,8 +44,19 @@ const Learning = () => {
   const minCharacters = 50;
 
   return (
-    <div className="min-h-screen bg-background flex items-center justify-center p-4">
-      <div className="w-full max-w-3xl space-y-6">
+    <div className="min-h-screen bg-background py-8 px-4">
+      <div className="w-full max-w-3xl mx-auto space-y-6">
+        <div className="flex items-center justify-between">
+          <Button
+            variant="outline"
+            onClick={() => navigate("/")}
+            className="gap-2"
+          >
+            <Home className="h-4 w-4" />
+            Voltar
+          </Button>
+        </div>
+
         <div className="text-center space-y-2">
           <div className="flex justify-center mb-4">
             <BookOpen className="h-12 w-12 text-primary" />
@@ -99,13 +110,7 @@ const Learning = () => {
               </ul>
             </div>
 
-            <div className="flex justify-between pt-4">
-              <Button
-                variant="outline"
-                onClick={() => navigate("/upload")}
-              >
-                Voltar
-              </Button>
+            <div className="flex justify-end pt-4">
               <Button
                 onClick={handleSubmit}
                 disabled={characterCount < minCharacters}
@@ -123,4 +128,4 @@ const Learning = () => {
   );
 };
 
-export default Learning;
+export default Aluno;

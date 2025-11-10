@@ -151,18 +151,18 @@ const Results = () => {
         <div className="flex justify-center gap-4 pt-4">
           <Button
             variant="outline"
-            onClick={() => navigate("/upload")}
+            onClick={() => navigate("/")}
             size="lg"
             className="gap-2"
           >
             <Home className="h-4 w-4" />
-            Novo Módulo
+            Voltar ao Início
           </Button>
           <Button
-            onClick={() => navigate("/learning")}
+            onClick={() => navigate("/aluno")}
             size="lg"
           >
-            Refazer Análise
+            Nova Análise
           </Button>
         </div>
       </div>
